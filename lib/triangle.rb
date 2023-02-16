@@ -1,5 +1,4 @@
 class Triangle
-  # write code here
   attr_accessor :equilateral, :isosceles, :scalene
   
   def initialize(equilateral, isosceles, scalene)
@@ -12,20 +11,26 @@ class Triangle
   # elsif: sideA == sideB || sideA == sideC || sideA || sideB == sideC return :isosceles
   # else return :scalene
   def kind
+  validate_triangle
   if (equilateral == isosceles && isosceles == scalene)
     :equilateral
-  elsif (equilateral == isosceles || equilateral == scalene || isosceles == scalene)
+  elsif (equilateral == isosceles || isosceles == scalene || equilateral == scalene)
     :isosceles
   else
     :scalene
   end
-end
-# end
 
-    class TriangleError < StandardError
-    # triangle error code
-    def message
-      "RangeError"
+end
+
+  # validate triangles
+  def validate_triangle
+    sides = [equilateral, isosceles, scalene].sort
+    raise TriangleError unless sides.all?(&:positive?)
+    raise TriangleError unless sides[0] + sides[1] > sides[2]
     end
+
+  class TriangleError < StandardError
+    # triangle error code
   end
+
 end
